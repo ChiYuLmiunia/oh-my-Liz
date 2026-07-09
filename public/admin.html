@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐭 管理后台</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/home" class="navbar-brand">
+      <span>🐭</span>
+      <span>鼠鼠发展改革委员会</span>
+    </a>
+    <div class="navbar-user">
+      <span class="username" id="navUsername"></span>
+      <span class="balance">💰 <span id="navBalance">0</span> 鼠鼠币</span>
+      <button class="logout-btn" onclick="logout()">退出</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h2>⚙️ 管理后台</h2>
+        <div style="margin-left: auto;">
+          <a href="/home" class="btn btn-secondary btn-sm">← 返回主页</a>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" onclick="switchAdminTab('users', this)">👥 用户管理</button>
+        <button class="tab" onclick="switchAdminTab('pending', this)">⏳ 待审核</button>
+        <button class="tab" onclick="switchAdminTab('products', this)">🛍️ 商品管理</button>
+        <button class="tab" onclick="switchAdminTab('create-product', this)">➕ 创建商品</button>
+      </div>
+
+      <div id="message"></div>
+
+      <!-- 用户管理 -->
+      <div id="tab-users" class="tab-content active">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>角色</th>
+                <th>余额</th>
+                <th>注册时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <tr><td colspan="6" style="text-align: center;">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 待审核用户 -->
+      <div id="tab-pending" class="tab-content">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>用户名</th>
+                <th>注册时间</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="pendingTableBody">
+              <tr><td colspan="4" style="text-align: center;">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 商品管理 -->
+      <div id="tab-products" class="tab-content">
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>商品名</th>
+                <th>类型</th>
+                <th>价格</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <tr><td colspan="6" style="text-align: center;">加载中...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 创建商品 -->
+      <div id="tab-create-product" class="tab-content">
+        <form id="createProductForm" onsubmit="handleCreateProduct(event)" style="max-width: 600px;">
+          <div class="form-group">
+            <label>商品名称</label>
+            <input type="text" id="productName" placeholder="请输入商品名称" required>
+          </div>
+          <div class="form-group">
+            <label>商品类型</label>
+            <select id="productType" required>
+              <option value="">请选择类型</option>
+              <option value="virtual_rights">🎫 虚拟权益</option>
+              <option value="physical_gift">🎁 实体礼物</option>
+              <option value="privilege">⭐ 特权</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>价格 (鼠鼠币)</label>
+            <input type="number" id="productPrice" placeholder="请输入价格" min="1" required>
+          </div>
+          <div class="form-group">
+            <label>商品描述</label>
+            <textarea id="productDesc" rows="4" placeholder="请输入商品描述"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">➕ 创建商品</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 修改余额模态框 -->
+  <div class="modal" id="balanceModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>修改余额</h3>
+        <button class="modal-close" onclick="closeModal('balanceModal')">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateBalance(event)">
+        <input type="hidden" id="balanceUserId">
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" id="balanceUsername" disabled>
+        </div>
+        <div class="form-group">
+          <label>操作类型</label>
+          <select id="balanceOperation" required onchange="updateBalanceLabel()">
+            <option value="add">添加鼠鼠币</option>
+            <option value="subtract">减少鼠鼠币</option>
+            <option value="set">设置为</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label id="balanceAmountLabel">数量</label>
+          <input type="number" id="balanceAmount" placeholder="请输入数量" min="0" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">确认修改</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- 修改角色模态框 -->
+  <div class="modal" id="roleModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>修改角色</h3>
+        <button class="modal-close" onclick="closeModal('roleModal')">&times;</button>
+      </div>
+      <form onsubmit="handleUpdateRole(event)">
+        <input type="hidden" id="roleUserId">
+        <div class="form-group">
+          <label>用户名</label>
+          <input type="text" id="roleUsername" disabled>
+        </div>
+        <div class="form-group">
+          <label>新角色</label>
+          <select id="roleSelect" required>
+            <option value="user">🐭 普通用户</option>
+            <option value="streamer">🎤 主播</option>
+            <option value="admin">👑 管理员</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">确认修改</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

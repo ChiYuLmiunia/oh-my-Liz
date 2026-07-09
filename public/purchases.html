@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐭 购买记录</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/home" class="navbar-brand">
+      <span>🐭</span>
+      <span>鼠鼠发展改革委员会</span>
+    </a>
+    <div class="navbar-user">
+      <span class="username" id="navUsername"></span>
+      <span class="balance">💰 <span id="navBalance">0</span> 鼠鼠币</span>
+      <button class="logout-btn" onclick="logout()">退出</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="card">
+      <div class="card-header">
+        <h2>📋 购买记录</h2>
+        <div style="margin-left: auto;">
+          <a href="/home" class="btn btn-secondary btn-sm">← 返回主页</a>
+        </div>
+      </div>
+
+      <div id="purchaseList">
+        <div class="empty-state">
+          <div class="loading"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/purchases.js"></script>
+</body>
+</html>

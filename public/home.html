@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🐭 鼠鼠发展改革委员会 - 主页</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <nav class="navbar">
+    <a href="/home" class="navbar-brand">
+      <span>🐭</span>
+      <span>鼠鼠发展改革委员会</span>
+    </a>
+    <div class="navbar-user">
+      <span class="username" id="navUsername"></span>
+      <span class="balance">💰 <span id="navBalance">0</span> 鼠鼠币</span>
+      <button class="logout-btn" onclick="logout()">退出</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="home-hero">
+      <h1>🐭 欢迎来到鼠鼠银行</h1>
+      <p style="color: var(--text-light); font-size: 1.1rem;">这里是您的鼠鼠币账户管理中心</p>
+      
+      <div class="stats">
+        <div class="stat-card">
+          <div class="icon">💰</div>
+          <div class="value" id="homeBalance">0</div>
+          <div class="label">鼠鼠币余额</div>
+        </div>
+        <div class="stat-card">
+          <div class="icon">🛍️</div>
+          <div class="value" id="homePurchaseCount">0</div>
+          <div class="label">购买次数</div>
+        </div>
+        <div class="stat-card">
+          <div class="icon">🏷️</div>
+          <div class="value" id="homeRole">-</div>
+          <div class="label">账号角色</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>🎯 快捷入口</h2>
+      </div>
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+        <a href="/shop" class="btn btn-primary">🛒 前往商店</a>
+        <a href="/purchases" class="btn btn-secondary">📋 购买记录</a>
+        <span id="adminLink" style="display: none;">
+          <a href="/admin" class="btn btn-warning">⚙️ 管理后台</a>
+        </span>
+      </div>
+    </div>
+
+    <div class="card" id="purchaseHistoryCard">
+      <div class="card-header">
+        <h2>📝 最近购买</h2>
+      </div>
+      <div id="recentPurchases">
+        <div class="empty-state">
+          <div class="icon">🐭</div>
+          <p>还没有购买记录哦~</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/home.js"></script>
+</body>
+</html>
