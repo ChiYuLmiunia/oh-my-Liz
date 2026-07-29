@@ -29,7 +29,7 @@ async function handleLogin(e) {
     if (result.success) {
       localStorage.setItem('token', result.data.token);
       localStorage.setItem('user', JSON.stringify(result.data.user));
-      window.location.href = '/home';
+      transitionAPI.navigate('/home');
     } else {
       showMessage(result.message);
     }
@@ -65,11 +65,13 @@ async function handleRegister(e) {
 
 // 检查是否已登录
 (function checkAuth() {
+  animatePageLoad();
+
   const token = getToken();
   if (token) {
     const user = getUser();
     if (user && user.role && user.role !== 'pending') {
-      window.location.href = '/home';
+      transitionAPI.navigate('/home');
     }
   }
 })();

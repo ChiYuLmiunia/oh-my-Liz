@@ -14,7 +14,7 @@
     </a>
     <div class="navbar-user">
       <span class="username" id="navUsername"></span>
-      <span class="balance">💰 <span id="navBalance">0</span> 鼠鼠币</span>
+      <span class="balance">💰 <span class="balance-value" id="navBalance">0</span> 鼠鼠币</span>
       <button class="logout-btn" onclick="logout()">退出</button>
     </div>
   </nav>
@@ -67,8 +67,31 @@
         </div>
       </div>
     </div>
+
+    <div class="card" id="chartCard">
+      <div class="card-header">
+        <h2>📈 累计花费趋势</h2>
+      </div>
+      <div id="spendingChart" class="chart-container">
+        <div class="empty-state">
+          <div class="icon">🐭</div>
+          <p>还没有购买记录，开始消费吧~</p>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="rgba(255, 143, 171, 0.25)" />
+        <stop offset="100%" stop-color="rgba(255, 143, 171, 0.0)" />
+      </linearGradient>
+    </defs>
+  </svg>
+
+  <script src="/js/animations.js"></script>
+  <script src="/js/transition.js"></script>
   <script src="/js/api.js"></script>
   <script src="/js/home.js"></script>
 </body>

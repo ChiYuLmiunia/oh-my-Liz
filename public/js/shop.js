@@ -21,6 +21,8 @@ let allProducts = [];
 let currentFilter = 'all';
 
 async function loadShop() {
+  animatePageLoad();
+
   const user = getUser();
   if (!user || user.role === 'pending') {
     window.location.href = '/';
@@ -75,6 +77,9 @@ function renderProducts() {
       </div>
     </div>
   `).join('');
+
+  // 商品卡片入场动画
+  animateChildren(container, '.product-card', { delay: 60, fromTop: 25 });
 }
 
 function filterProducts(type, btn) {
@@ -132,7 +137,7 @@ async function confirmPurchase(productId, price) {
       await loadProducts();
 
       setTimeout(() => {
-        window.location.href = '/home';
+        transitionAPI.navigate('/home');
       }, 1500);
     } else {
       showMessage(result.message);

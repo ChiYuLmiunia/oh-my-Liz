@@ -12,6 +12,8 @@ const typeMap = {
 };
 
 async function loadAdmin() {
+  animatePageLoad();
+
   const user = getUser();
   if (!user || !['admin', 'streamer'].includes(user.role)) {
     window.location.href = '/';
@@ -26,6 +28,18 @@ async function loadAdmin() {
     loadPendingUsers(),
     loadProducts()
   ]);
+
+  // 表格行入场动画
+  setTimeout(() => {
+    const usersTbody = document.getElementById('usersTableBody');
+    if (usersTbody) animateChildren(usersTbody, 'tr', { delay: 40 });
+
+    const pendingTbody = document.getElementById('pendingTableBody');
+    if (pendingTbody) animateChildren(pendingTbody, 'tr', { delay: 40 });
+
+    const productsTbody = document.getElementById('productsTableBody');
+    if (productsTbody) animateChildren(productsTbody, 'tr', { delay: 40 });
+  }, 100);
 }
 
 function switchAdminTab(tabName, btn) {

@@ -5,6 +5,8 @@ const typeMap = {
 };
 
 async function loadPurchases() {
+  animatePageLoad();
+
   const user = getUser();
   if (!user || user.role === 'pending') {
     window.location.href = '/';
@@ -48,6 +50,9 @@ function renderPurchases(purchases) {
       <div class="purchase-amount">${p.total_price}</div>
     </div>
   `).join('');
+
+  // 购买记录入场动画
+  animateChildren(container, '.purchase-item', { delay: 60, fromLeft: 20 });
 }
 
 document.addEventListener('DOMContentLoaded', loadPurchases);
