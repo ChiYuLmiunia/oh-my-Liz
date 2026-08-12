@@ -51,7 +51,7 @@ function initDatabase() {
     )
   `);
 
-  // 初始化管理员账户 (密码: admin123)
+  // 初始化管理员账户 (密码: admin123) - sync only during startup, acceptable
   const adminExists = db.prepare('SELECT id FROM users WHERE username = ?').get('admin');
   if (!adminExists) {
     const bcrypt = require('bcryptjs');
@@ -59,7 +59,7 @@ function initDatabase() {
     db.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run('admin', hashedPassword, 'admin');
   }
 
-  // 初始化第一个主播账户 (密码: streamer123)
+  // 初始化第一个主播账户 (密码: streamer123) - sync only during startup, acceptable
   const streamerExists = db.prepare('SELECT id FROM users WHERE username = ?').get('streamer');
   if (!streamerExists) {
     const bcrypt = require('bcryptjs');

@@ -49,8 +49,9 @@ router.post('/', authenticateToken, authorizeRoles('admin', 'streamer'), (req, r
     return res.status(400).json({ success: false, message: '无效的商品类型' });
   }
 
-  if (parseInt(price) <= 0) {
-    return res.status(400).json({ success: false, message: '价格必须大于0' });
+  const priceNum = Number(price);
+  if (!Number.isFinite(priceNum) || priceNum <= 0 || priceNum !== Math.floor(priceNum)) {
+    return res.status(400).json({ success: false, message: '价格必须为大于0的整数' });
   }
 
   try {
@@ -160,15 +161,20 @@ router.post('/purchase/:productId', authenticateToken, (req, res) => {
       return res.status(400).json({ success: false, message: '鼠鼠币余额不足' });
     }
 
-    // 扣除余额
-    const newBalance = user.balance - product.price;
-    db.prepare('UPDATE users SET balance = ?, updated_at = datetime(\'now\') WHERE id = ?').run(newBalance, user.id);
+    // Wrap in a transaction so balance deduction and purchase record are atomic
+    const txn = db.transaction(() => {
+      const newBalance = user.balance - product.price;
+      db.prepare('UPDATE users SET balance = ?, updated_at = datetime(\'now\') WHERE id = ?').run(newBalance, user.id);
 
-    // 记录购买
-    db.prepare(`
-      INSERT INTO purchases (user_id, product_id, quantity, total_price)
-      VALUES (?, ?, 1, ?)
-    `).run(user.id, product.id, product.price);
+      db.prepare(`
+        INSERT INTO purchases (user_id, product_id, quantity, total_price)
+        VALUES (?, ?, 1, ?)
+      `).run(user.id, product.id, product.price);
+
+      return { newBalance };
+    });
+
+    const { newBalance } = txn();
 
     res.json({
       success: true,

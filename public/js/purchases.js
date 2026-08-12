@@ -43,11 +43,11 @@ function renderPurchases(purchases) {
     <div class="purchase-item">
       <div class="purchase-info">
         <div class="purchase-product">
-          ${typeMap[p.product_type] || p.product_type} - ${p.product_name}
+          ${escapeHtml(typeMap[p.product_type] || p.product_type)} - ${escapeHtml(p.product_name)}
         </div>
-        <div class="purchase-time">${new Date(p.created_at).toLocaleString('zh-CN')}</div>
+        <div class="purchase-time">${escapeHtml(new Date(p.created_at).toLocaleString('zh-CN'))}</div>
       </div>
-      <div class="purchase-amount">${p.total_price}</div>
+      <div class="purchase-amount">${escapeHtml(p.total_price)}</div>
     </div>
   `).join('');
 

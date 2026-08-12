@@ -69,14 +69,14 @@ function renderUsers(users) {
 
   tbody.innerHTML = users.map(u => `
     <tr>
-      <td>${u.id}</td>
-      <td><strong>${u.username}</strong></td>
-      <td><span class="role-badge role-${u.role}">${roleMap[u.role] || u.role}</span></td>
-      <td>${u.balance}</td>
-      <td>${new Date(u.created_at).toLocaleDateString('zh-CN')}</td>
+      <td>${escapeHtml(u.id)}</td>
+      <td><strong>${escapeHtml(u.username)}</strong></td>
+      <td><span class="role-badge role-${escapeHtml(u.role)}">${roleMap[u.role] || u.role}</span></td>
+      <td>${escapeHtml(u.balance)}</td>
+      <td>${escapeHtml(new Date(u.created_at).toLocaleDateString('zh-CN'))}</td>
       <td class="action-buttons">
-        <button class="btn btn-primary btn-sm" onclick="openBalanceModal(${u.id}, '${u.username.replace(/'/g, "\\'")}')">💰</button>
-        ${u.role !== 'admin' ? `<button class="btn btn-secondary btn-sm" onclick="openRoleModal(${u.id}, '${u.username.replace(/'/g, "\\'")}')">🔄</button>` : '<span style="color: var(--text-light); font-size: 0.85rem;">不可修改</span>'}
+        <button class="btn btn-primary btn-sm" onclick="openBalanceModal(${u.id}, '${escapeHtml(u.username).replace(/'/g, "\\'")}')">💰</button>
+        ${u.role !== 'admin' ? `<button class="btn btn-secondary btn-sm" onclick="openRoleModal(${u.id}, '${escapeHtml(u.username).replace(/'/g, "\\'")}')">🔄</button>` : '<span style="color: var(--text-light); font-size: 0.85rem;">不可修改</span>'}
       </td>
     </tr>
   `).join('');
@@ -102,12 +102,12 @@ function renderPendingUsers(users) {
 
   tbody.innerHTML = users.map(u => `
     <tr>
-      <td>${u.id}</td>
-      <td><strong>${u.username}</strong></td>
-      <td>${new Date(u.created_at).toLocaleDateString('zh-CN')}</td>
+      <td>${escapeHtml(u.id)}</td>
+      <td><strong>${escapeHtml(u.username)}</strong></td>
+      <td>${escapeHtml(new Date(u.created_at).toLocaleDateString('zh-CN'))}</td>
       <td class="action-buttons">
-        <button class="btn btn-success btn-sm" onclick="approveUser(${u.id}, '${u.username.replace(/'/g, "\\'")}', 'user')">🐭 普通用户</button>
-        <button class="btn btn-primary btn-sm" onclick="approveUser(${u.id}, '${u.username.replace(/'/g, "\\'")}', 'streamer')">🎤 主播</button>
+        <button class="btn btn-success btn-sm" onclick="approveUser(${u.id}, '${escapeHtml(u.username).replace(/'/g, "\\'")}', 'user')">🐭 普通用户</button>
+        <button class="btn btn-primary btn-sm" onclick="approveUser(${u.id}, '${escapeHtml(u.username).replace(/'/g, "\\'")}', 'streamer')">🎤 主播</button>
       </td>
     </tr>
   `).join('');
@@ -152,21 +152,21 @@ function renderProducts(products) {
 
   tbody.innerHTML = products.map(p => `
     <tr>
-      <td>${p.id}</td>
-      <td><strong>${p.name}</strong></td>
+      <td>${escapeHtml(p.id)}</td>
+      <td><strong>${escapeHtml(p.name)}</strong></td>
       <td>${typeMap[p.type] || p.type}</td>
-      <td>${p.price}</td>
+      <td>${escapeHtml(p.price)}</td>
       <td>
         <span class="role-badge ${p.is_listed ? 'role-user' : 'role-pending'}">
           ${p.is_listed ? '已上架' : '已下架'}
         </span>
       </td>
       <td class="action-buttons">
-        <button class="btn ${p.is_listed ? 'btn-warning' : 'btn-success'} btn-sm" 
+        <button class="btn ${p.is_listed ? 'btn-warning' : 'btn-success'} btn-sm"
                 onclick="toggleProduct(${p.id}, ${!p.is_listed})">
           ${p.is_listed ? '⏸️ 下架' : '✅ 上架'}
         </button>
-        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id}, '${p.name.replace(/'/g, "\\'")}')">🗑️</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id}, '${escapeHtml(p.name).replace(/'/g, "\\'")}')">🗑️</button>
       </td>
     </tr>
   `).join('');

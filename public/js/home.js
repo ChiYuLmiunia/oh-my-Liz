@@ -78,10 +78,10 @@ async function loadPurchaseHistory() {
         container.innerHTML = recent.map(p => `
           <div class="purchase-item">
             <div class="purchase-info">
-              <div class="purchase-product">${p.product_name}</div>
-              <div class="purchase-time">${new Date(p.created_at).toLocaleString('zh-CN')}</div>
+              <div class="purchase-product">${escapeHtml(p.product_name)}</div>
+              <div class="purchase-time">${escapeHtml(new Date(p.created_at).toLocaleString('zh-CN'))}</div>
             </div>
-            <div class="purchase-amount">${p.total_price}</div>
+            <div class="purchase-amount">${escapeHtml(p.total_price)}</div>
           </div>
         `).join('');
 

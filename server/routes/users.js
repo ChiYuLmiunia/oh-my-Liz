@@ -92,8 +92,9 @@ router.put('/balance/:userId', authenticateToken, authorizeRoles('admin', 'strea
   const { userId } = req.params;
   const { amount, operation } = req.body;
 
-  if (!amount || isNaN(amount)) {
-    return res.status(400).json({ success: false, message: '请输入有效的金额' });
+  const amountNum = Number(amount);
+  if (!Number.isFinite(amountNum) || amountNum <= 0 || amountNum !== Math.floor(amountNum)) {
+    return res.status(400).json({ success: false, message: '请输入有效的正整数金额' });
   }
 
   if (!['add', 'subtract', 'set'].includes(operation)) {

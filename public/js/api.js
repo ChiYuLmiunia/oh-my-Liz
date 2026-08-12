@@ -15,7 +15,17 @@ function logout() {
   window.location.href = '/';
 }
 
-async function apiRequest(endpoint, options = {}) {
+async function escapeHtml(str) {
+  if (typeof str !== 'string') return str;
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;');
+}
+
+function apiRequest(endpoint, options = {}) {
   const token = getToken();
   const headers = {
     'Content-Type': 'application/json',
@@ -33,12 +43,15 @@ async function apiRequest(endpoint, options = {}) {
 
   const data = await response.json();
 
-  if (!response.ok && data.message) {
-    if (response.status === 403 && data.message.includes('登录已过期')) {
-      logout();
-      throw new Error('登录已过期');
+  if (!response.ok) {
+    let message = data && data.message;
+    if (!message) {
+      message = response.statusText || `HTTP ${response.status}`;
     }
-    throw new Error(data.message);
+    if (response.status === 403 && message.includes('登录已过期')) {
+      logout();
+    }
+    throw new Error(message);
   }
 
   return data;

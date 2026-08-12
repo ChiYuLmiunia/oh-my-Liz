@@ -5,8 +5,8 @@ const { authenticateToken, generateToken } = require('../middleware/auth');
 
 const router = express.Router();
 
-// 注册
-router.post('/register', (req, res) => {
+// Register (async bcrypt)
+router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -23,7 +23,7 @@ router.post('/register', (req, res) => {
       return res.status(400).json({ success: false, message: '用户名已存在' });
     }
 
-    const hashedPassword = bcrypt.hashSync(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
     const result = db.prepare('INSERT INTO users (username, password, role) VALUES (?, ?, ?)').run(username, hashedPassword, 'pending');
 
     db.prepare('UPDATE users SET updated_at = datetime(\'now\') WHERE id = ?').run(result.lastInsertRowid);
@@ -38,8 +38,8 @@ router.post('/register', (req, res) => {
   }
 });
 
-// 登录
-router.post('/login', (req, res) => {
+// Login (async bcrypt)
+router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
@@ -53,7 +53,7 @@ router.post('/login', (req, res) => {
       return res.status(401).json({ success: false, message: '用户名或密码错误' });
     }
 
-    if (!bcrypt.compareSync(password, user.password)) {
+    if (!await bcrypt.compare(password, user.password)) {
       return res.status(401).json({ success: false, message: '用户名或密码错误' });
     }
 

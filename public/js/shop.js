@@ -66,12 +66,12 @@ function renderProducts() {
   container.innerHTML = products.map(p => `
     <div class="product-card">
       <span class="product-type ${p.type}">${typeIcons[p.type] || ''} ${typeMap[p.type] || p.type}</span>
-      <div class="product-name">${p.name}</div>
-      <div class="product-desc">${p.description || '暂无描述'}</div>
+      <div class="product-name">${escapeHtml(p.name)}</div>
+      <div class="product-desc">${escapeHtml(p.description) || '暂无描述'}</div>
       <div class="product-price">${p.price}</div>
       <div class="product-footer">
-        <span class="product-creator">由 ${p.creator_name || '系统'} 上架</span>
-        <button class="btn btn-primary btn-sm" onclick="showPurchaseConfirm(${p.id}, '${p.name.replace(/'/g, "\\'")}', ${p.price})">
+        <span class="product-creator">由 ${escapeHtml(p.creator_name) || '系统'} 上架</span>
+        <button class="btn btn-primary btn-sm" onclick="showPurchaseConfirm(${p.id}, '${escapeHtml(p.name).replace(/'/g, "\\'")}', ${p.price})">
           购买
         </button>
       </div>
